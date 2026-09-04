@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Or-sync Inbox</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">Ö</div>
+        <div>
+          <h1>Or-sync Inbox</h1>
+          <p>Local sales agent demo</p>
+        </div>
+      </div>
+
+      <nav class="channels" id="channel-tabs">
+        <button class="channel active" data-channel="web">Web</button>
+        <button class="channel" data-channel="whatsapp">WhatsApp</button>
+        <button class="channel" data-channel="instagram">Instagram</button>
+        <button class="channel" data-channel="ads">Ads</button>
+      </nav>
+
+      <div class="sidebar-actions">
+        <button id="new-chat-btn" class="secondary-btn">New chat</button>
+        <label class="toggle">
+          <input type="checkbox" id="show-trace" />
+          <span>Show agent trace</span>
+        </label>
+      </div>
+
+      <div class="status-panel">
+        <div id="connection-status" class="status-dot offline">Connecting…</div>
+        <div id="session-info" class="muted">No active session</div>
+      </div>
+    </aside>
+
+    <main class="chat-panel">
+      <header class="chat-header">
+        <div>
+          <h2 id="channel-title">Web chat</h2>
+          <p id="channel-subtitle">Simulated customer conversation</p>
+        </div>
+        <div id="handoff-banner" class="handoff-banner hidden">
+          Pricing — human takeover requested
+        </div>
+      </header>
+
+      <section id="messages" class="messages" aria-live="polite"></section>
+
+      <form id="chat-form" class="composer">
+        <textarea
+          id="message-input"
+          rows="2"
+          placeholder="Ask about Or-sync services, book a demo, or ask about pricing…"
+          required
+        ></textarea>
+        <button type="submit" id="send-btn">Send</button>
+      </form>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

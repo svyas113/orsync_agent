@@ -1,0 +1,13 @@
+.venv/
+.venv312/
+__pycache__/
+*.pyc
+.env
+orsync_workflow/fastworkflow.passwords.env
+orsync_workflow/___command_info/
+orsync_workflow/___convo_info/
+orsync_workflow/___workflow_contexts/
+___workflow_contexts/
+data/*.jsonl
+action.jsonl
+.DS_Store
