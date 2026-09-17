@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Deletion | Ör-sync</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%234f8fff'/%3E%3Cstop offset='100%25' style='stop-color:%237c3aed'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='30' fill='url(%23g)'/%3E%3Ctext x='32' y='43' font-family='Arial' font-size='28' font-weight='bold' fill='white' text-anchor='middle'%3EO%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-card: #16162a;
+      --text-primary: #f0f0f0;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent-blue: #4f8fff;
+      --accent-purple: #7c3aed;
+      --accent-gradient: linear-gradient(135deg, #4f8fff, #7c3aed);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --transition: 0.3s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+      height: 72px; display: flex; align-items: center;
+    }
+
+    .navbar-inner {
+      width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .navbar-brand {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 1.5rem; font-weight: 700; color: var(--text-primary); text-decoration: none;
+    }
+
+    .brand-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; background: var(--accent-gradient);
+      border-radius: 10px; font-size: 1.25rem; font-weight: 800; color: white;
+    }
+
+    .brand-text {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .navbar-link {
+      padding: 8px 20px; border-radius: var(--radius-sm); color: var(--text-secondary);
+      font-weight: 500; font-size: 0.9375rem; text-decoration: none; transition: all var(--transition);
+    }
+
+    .navbar-link:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.05); }
+
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    .hero {
+      padding: 140px 0 60px; text-align: center; position: relative; overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none;
+    }
+
+    .hero-glow-1 {
+      width: 400px; height: 400px; background: var(--accent-blue);
+      top: -150px; left: 50%; transform: translateX(-70%); opacity: 0.12;
+    }
+
+    .hero-glow-2 {
+      width: 300px; height: 300px; background: var(--accent-purple);
+      top: -80px; left: 50%; transform: translateX(20%); opacity: 0.1;
+    }
+
+    .hero h1 {
+      font-size: 3.25rem; font-weight: 800; letter-spacing: -1.5px;
+      line-height: 1.15; margin-bottom: 16px; position: relative;
+    }
+
+    .gradient-text {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.125rem; color: var(--text-secondary);
+      max-width: 560px; margin: 0 auto; line-height: 1.7; position: relative;
+    }
+
+    .content { flex: 1; padding: 0 0 100px; }
+
+    .deletion-card {
+      max-width: 720px; margin: 0 auto;
+      background: var(--bg-card); border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg); padding: 48px; text-align: center;
+    }
+
+    .deletion-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(79, 143, 255, 0.1); border: 1px solid rgba(79, 143, 255, 0.15);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px; font-size: 2rem;
+    }
+
+    .deletion-card h2 {
+      font-size: 1.75rem; font-weight: 700; margin-bottom: 16px;
+    }
+
+    .deletion-card > p {
+      color: var(--text-secondary); font-size: 1rem; line-height: 1.8;
+      max-width: 540px; margin: 0 auto 36px;
+    }
+
+    .steps {
+      display: flex; flex-direction: column; gap: 20px;
+      text-align: left; margin-bottom: 40px;
+    }
+
+    .step {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: var(--bg-secondary); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); padding: 20px 24px;
+    }
+
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--accent-gradient);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.875rem; font-weight: 700; color: white; flex-shrink: 0;
+    }
+
+    .step h3 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .step p { color: var(--text-secondary); font-size: 0.9375rem; line-height: 1.6; }
+
+    .email-block {
+      background: var(--bg-secondary); border: 1px solid var(--border-color);
+      border-radius: var(--radius-md); padding: 24px; margin-bottom: 32px;
+    }
+
+    .email-label { font-size: 0.8125rem; color: var(--text-muted); margin-bottom: 6px; }
+
+    .email-address {
+      font-size: 1.25rem; font-weight: 600;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .email-address a {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      text-decoration: none;
+    }
+
+    .note {
+      font-size: 0.875rem; color: var(--text-muted); line-height: 1.7;
+      max-width: 480px; margin: 0 auto;
+    }
+
+    .footer {
+      background: var(--bg-secondary); border-top: 1px solid var(--border-color); padding: 32px 0;
+    }
+
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .footer p { color: var(--text-muted); font-size: 0.875rem; }
+
+    .footer-links { display: flex; gap: 24px; }
+
+    .footer-links a {
+      color: var(--text-muted); font-size: 0.875rem; text-decoration: none; transition: color var(--transition);
+    }
+
+    .footer-links a:hover { color: var(--text-secondary); }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 2.25rem; }
+      .hero p { font-size: 1rem; }
+      .deletion-card { padding: 32px 20px; }
+      .footer-inner { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="/" class="navbar-brand">
+        <span class="brand-icon">O</span>
+        <span class="brand-text">r-sync</span>
+      </a>
+      <a href="/" class="navbar-link">Back to Website</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-glow hero-glow-1"></div>
+    <div class="hero-glow hero-glow-2"></div>
+    <div class="container">
+      <h1>Data Deletion<br><span class="gradient-text">Instructions</span></h1>
+      <p>We respect your right to control your personal data. Follow the steps below to request deletion of your data from our systems.</p>
+    </div>
+  </section>
+
+  <div class="content">
+    <div class="container">
+      <div class="deletion-card">
+        <div class="deletion-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#4f8fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+            <line x1="10" y1="11" x2="10" y2="17"></line>
+            <line x1="14" y1="11" x2="14" y2="17"></line>
+          </svg>
+        </div>
+
+        <h2>How to Request Data Deletion</h2>
+        <p>If you'd like us to delete your personal data from our systems, simply send us an email. We'll take care of the rest.</p>
+
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <div>
+              <h3>Send Us an Email</h3>
+              <p>Write to us at the email address below. Include your name and the phone number or email address associated with your account so we can locate your data.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <div>
+              <h3>We Verify Your Identity</h3>
+              <p>For your security, we may ask you to confirm your identity before processing the request.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <div>
+              <h3>Data Is Deleted</h3>
+              <p>Once verified, we will permanently delete your personal data from our systems within 30 business days and send you a confirmation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="email-block">
+          <p class="email-label">Send your deletion request to:</p>
+          <p class="email-address"><a href="mailto:hello@orsync.com">hello@orsync.com</a></p>
+        </div>
+
+        <p class="note">
+          Please note: Some data may be retained where required by law or for legitimate business purposes (e.g., fraud prevention, legal obligations). We will inform you if any such exceptions apply to your request.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <p>&copy; 2026 Ör-sync. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="/">Home</a>
+          <a href="index.html">Privacy Policy</a>
+          <a href="terms-of-service.html">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
