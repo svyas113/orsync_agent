@@ -1,0 +1,9 @@
+**/.env
+**/fastworkflow.passwords.env
+**/node_modules/
+**/dist/
+**/___command_info/
+**/___convo_info/
+**/__pycache__/
+*.pyc
+.DS_Store
